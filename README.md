@@ -23,14 +23,9 @@ This web application fetches random quotes from the Quotable API and pairs them 
 ## Dependencies
 
 - React
-- Axios
 - Unsplash API (for background images)
 
 ## Credits
 
 - [Quotable API](https://api.quotable.io/)
 - [Unsplash API](https://unsplash.com/developers)
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
