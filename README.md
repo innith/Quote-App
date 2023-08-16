@@ -23,7 +23,7 @@ This web application fetches random quotes from the Quotable API and pairs them 
 ## Dependencies
 
 - React
-- axios
+- Axios
 - Unsplash API (for background images)
 
 ## Credits
