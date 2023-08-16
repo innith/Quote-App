@@ -1,4 +1,4 @@
-# Quote Images App with Unsplash Backgrounds
+# [Quote Images App with Unsplash Backgrounds](https://innith.github.io/Quote-App/)
 
 ![App Screenshot](Screenshot.png)
 
@@ -23,6 +23,7 @@ This web application fetches random quotes from the Quotable API and pairs them 
 ## Dependencies
 
 - React
+- axios
 - Unsplash API (for background images)
 
 ## Credits
