@@ -16,7 +16,7 @@ function App() {
 
   const fetchQuoteAndImage = async () => {
     try {
-      const quoteResponse = await fetch('https://api.quotable.io/random');
+      const quoteResponse = await fetch('http://api.quotable.io/random');
       const quoteData = await quoteResponse.json();
       setQuote({ content: quoteData.content, author: quoteData.author });
 
