@@ -3,7 +3,7 @@ import './App.css';
 import { createApi } from 'unsplash-js';
 
 const unsplash = createApi({
-  accessKey: 'qKXPi6XEslk7ghkVwPPIfzTXJrMG1YaizhlA_GNw_1s',
+  accessKey: process.env.accessKey,
 });
 
 function App() {
@@ -103,7 +103,7 @@ function App() {
           </blockquote>
         )}
         <button onClick={handleButtonClick}
-          style={{backgroundColor : `rgb(${255-bodyColor.r}, ${255-bodyColor.g}, ${255-bodyColor.b},0.5)`}} >Get Another Quote</button>
+          style={{ backgroundColor: `rgb(${255 - bodyColor.r}, ${255 - bodyColor.g}, ${255 - bodyColor.b},0.5)` }} >Get Another Quote</button>
       </div>
     </div>
   );
