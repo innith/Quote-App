@@ -3,7 +3,7 @@ import './App.css';
 import { createApi } from 'unsplash-js';
 
 const unsplash = createApi({
-  accessKey: process.env.accessKey,
+  accessKey: process.env.REACT_APP_UNSPLASH_KEY,
 });
 
 function App() {
@@ -13,18 +13,19 @@ function App() {
   const [contentPosition, setContentPosition] = useState({ left: 0, top: 0 });
   const [bodyColor, setBodyColor] = useState({ r: 0, g: 0, b: 0 });
 
-
   const fetchQuoteAndImage = async () => {
     try {
-      const quoteResponse = await fetch('http://api.quotable.io/random');
+      const quoteResponse = await fetch('https://dummyjson.com/quotes/random');
       const quoteData = await quoteResponse.json();
-      setQuote({ content: quoteData.content, author: quoteData.author });
 
-      const authorName = quoteData.author;
+      setQuote({ content: quoteData.quote, author: quoteData.author });
+
+
       const imageResponse = await unsplash.search.getPhotos({
-        query: authorName,
+        query: quoteData.author,
         perPage: 1,
       });
+
       if (imageResponse.response.results.length > 0) {
         const imageUrl = imageResponse.response.results[0].urls.regular;
         setAuthorImage(imageUrl);
@@ -37,6 +38,29 @@ function App() {
       console.error('Error fetching quote and image:', error);
     }
   };
+  // const fetchQuoteAndImage = async () => {
+  //   try {
+  //     const quoteResponse = await fetch('https://zenquotes.io/api/random');
+  //     const quoteData = await quoteResponse.json();
+  //     setQuote({ content: quoteData.q, author: quoteData.a });
+
+  //     const authorName = quoteData.a
+  //     const imageResponse = await unsplash.search.getPhotos({
+  //       query: authorName,
+  //       perPage: 1,
+  //     });
+  //     if (imageResponse.response.results.length > 0) {
+  //       const imageUrl = imageResponse.response.results[0].urls.regular;
+  //       setAuthorImage(imageUrl);
+  //     } else {
+  //       setAuthorImage('');
+  //     }
+
+  //     setIsLoading(false);
+  //   } catch (error) {
+  //     console.error('Error fetching quote and image:', error);
+  //   }
+  // };
 
   const handleButtonClick = () => {
     fetchQuoteAndImage();
@@ -84,13 +108,16 @@ function App() {
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
+        height: '100vh',
+        width: '100vw',
+        overflow: 'hidden',
       }}
     >
       <div
         className="quote-container"
         style={{
-          backgroundColor: `rgb(${bodyColor.r}, ${bodyColor.g}, ${bodyColor.b},0.5)`,
-
+          backgroundColor: `rgb(${bodyColor.r}, ${bodyColor.g}, ${bodyColor.b},0.4)`,
+          backdropFilter: 'blur(12px)',
           position: 'absolute',
           left: `${contentPosition.left}px`,
           top: `${contentPosition.top}px`,
