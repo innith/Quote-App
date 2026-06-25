@@ -1,3 +1,5 @@
+/*
+
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { createApi } from 'unsplash-js';
@@ -132,6 +134,93 @@ function App() {
         <button onClick={handleButtonClick}
           style={{ backgroundColor: `rgb(${255 - bodyColor.r}, ${255 - bodyColor.g}, ${255 - bodyColor.b},0.5)` }} >Get Another Quote</button>
       </div>
+    </div>
+  );
+}
+
+export default App;
+*/
+
+import React, { useState, useEffect, useRef } from 'react';
+import html2canvas from 'html2canvas';
+import './App.css';
+
+import QuoteCard from './components/QuoteCard';
+import { fetchQuoteAndImage } from './services/api';
+import { generateRandomColor, generateRandomPosition } from './utils.js/helpers';
+
+function App() {
+  const [quote, setQuote] = useState({ content: '', author: '' });
+  const [authorImage, setAuthorImage] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [contentPosition, setContentPosition] = useState({ left: 0, top: 0 });
+  const [bodyColor, setBodyColor] = useState({ r: 0, g: 0, b: 0 });
+
+  const appRef = useRef(null);
+
+  const loadNewQuote = async () => {
+    setIsLoading(true);
+    try {
+      const data = await fetchQuoteAndImage();
+      setQuote({ content: data.content, author: data.author });
+      setAuthorImage(data.imageUrl);
+    } catch (error) {
+      console.error("Failed to load new quote.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleButtonClick = () => {
+    loadNewQuote();
+    setContentPosition(generateRandomPosition());
+    setBodyColor(generateRandomColor());
+  };
+
+  const handleDownload = async () => {
+    if (!appRef.current) return;
+    try {
+      const canvas = await html2canvas(appRef.current, {
+        useCORS: true,
+        ignoreElements: (element) => element.classList.contains('no-capture'),
+      });
+      const image = canvas.toDataURL('image/png', 1.0);
+      const link = document.createElement('a');
+      link.href = image;
+      link.download = `quote-${quote.author.replace(/\s+/g, '-').toLowerCase()}.png`;
+      link.click();
+    } catch (error) {
+      console.error('Error saving image:', error);
+    }
+  };
+
+  useEffect(() => {
+    loadNewQuote();
+  }, []);
+
+  return (
+    <div
+      className="App"
+      ref={appRef}
+      style={{
+        backgroundImage: authorImage && !isLoading ? `url(${authorImage})` : 'none',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        height: '100vh',
+        width: '100vw',
+        overflow: 'hidden',
+      }}
+    >
+      <QuoteCard
+        isLoading={isLoading}
+        quote={quote}
+        authorImage={authorImage}
+        bodyColor={bodyColor}
+        contentPosition={contentPosition}
+        onNewQuote={handleButtonClick}
+        onDownload={handleDownload}
+      />
     </div>
   );
 }
